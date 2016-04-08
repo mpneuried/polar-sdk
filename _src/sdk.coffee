@@ -23,7 +23,7 @@ module.exports = class PolarSDK extends require( "./basic" )
 		return
 	
 	register: ( [ user, message, email ]..., cb )=>
-		@log "debug", "register", [user, message, email]
+		@debug "register", [user, message, email]
 		if not ( email or user.email)?
 			@_handleError( cb, "EMISSINGEMAIL", uid: user.id )
 			return
@@ -35,9 +35,10 @@ module.exports = class PolarSDK extends require( "./basic" )
 			locale: @_getLocale( user.locale )
 	
 		@request.post "register", data, ( err, data )=>
+			@debug "register-return", err, data
 			if err?.statusCode is 409
 				# assuming a reregister leads to a 409
-				@log "warning", "got 409 so guess a reregister", opt.json
+				@warning "got 409 so guess a reregister", opt.json
 				cb( null, true )
 				return
 				
@@ -50,7 +51,7 @@ module.exports = class PolarSDK extends require( "./basic" )
 		return
 	
 	deregister: ( [ user, message, email ]..., cb )=>
-		@log "debug", "deregister", user, message
+		@debug "deregister", user, message
 		data =
 			email: email or user.email
 			"member-id": user.id

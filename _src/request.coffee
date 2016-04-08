@@ -25,10 +25,10 @@ module.exports = class PolarRequester extends require( "./basic" )
 			headers: @_headers( type, options )
 			method: "GET"
 		
-		@log "debug", "#{type}-req", opt
+		@debug "#{type}-req", opt
 		
 		request opt, ( err, res )=>
-			@log "debug", "#{type}-return", [ err, res.statusCode, res.body ]
+			@debug "#{type}-return", [ err, res.statusCode, res.body ]
 			if err
 				cb( err )
 				return
@@ -47,9 +47,9 @@ module.exports = class PolarRequester extends require( "./basic" )
 			method: "POST"
 			json: data or {}
 		
-		@log "debug", "#{type}-req", opt
+		@debug "#{type}-req", opt
 		request opt, ( err, res )=>
-			@log "debug", "#{type}-return", [ err, res.statusCode, res.body ]
+			@debug "#{type}-return", [ err, res.statusCode, res.body ]
 			if err
 				cb( err )
 				return
