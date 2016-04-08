@@ -178,7 +178,8 @@ The supported locales are:
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.2|2016-04-07|optimized debugging output|
+|0.0.4|2016-04-08|fixed (de)register calls, optimized ignore files|
+|0.0.3|2016-04-08|optimized debugging output|
 |0.0.2|2016-04-07|fixed error output|
 |0.0.1|2016-04-07|Initial commit|
 

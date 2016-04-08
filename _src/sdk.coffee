@@ -57,7 +57,7 @@ module.exports = class PolarSDK extends require( "./basic" )
 			"member-id": user.id
 			message: message or "disconnect from miloncare"
 		
-		@request.post "register", data, ( err, data )->
+		@request.post "deregister", data, ( err, data )->
 			if err
 				cb( err )
 				return
@@ -173,7 +173,7 @@ module.exports = class PolarSDK extends require( "./basic" )
 		else
 			lang = locale
 		lang = lang.toLowerCase()
-		if lang in @config.langcodes
+		if lang in @config.locales
 			return lang
 		return @config.fallbackLocale
 	
