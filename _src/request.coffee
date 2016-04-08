@@ -176,6 +176,6 @@ module.exports = class PolarRequester extends require( "./basic" )
 	ERRORS: =>
 		return @extend {}, super,
 			# Exceptions
-			"EPOLARERROR": [ 500, "EPOLARERROR: <%= body %>" ]
+			"EPOLARERROR": [ 500, "EPOLARERROR" ]
 			"EINVALIDTRANSACTIONTYPE": [ 406, "invalid transaction type. You tried to use the type `<%= type %>`, but only the types  `<% types.join( '`, `' ) %>` are allowed" ]
 			"EMISSINGTRANSACTIONID": [ 406, "to commit a transaction you have to add a transaction id" ]

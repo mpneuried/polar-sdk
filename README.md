@@ -178,7 +178,8 @@ The supported locales are:
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.1|2016-4-7|Initial commit|
+|0.0.2|2016-04-07|fixed error output|
+|0.0.1|2016-04-07|Initial commit|
 
 [![NPM](https://nodei.co/npm-dl/polar-sdk.png?months=6)](https://nodei.co/npm/polar-sdk/)
 
