@@ -148,7 +148,7 @@ module.exports = class PolarSDK extends require( "./basic" )
 			for exercise in result.exercise
 				exercises.push
 					user_id: exercise['member-id']
-					daytime: new Date(exercise['date'])
+					daytime: new Date(exercise['start-time'])
 					device: exercise.device
 					sport: exercise.sport
 					calories: exercise.calories or 0

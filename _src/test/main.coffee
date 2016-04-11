@@ -100,6 +100,7 @@ describe "----- polar-sdk TESTS -----", ->
 						#console.log exercise
 						exercise.should.have.property( "user_id" ).with.instanceof( String )
 						exercise.should.have.property( "daytime" ).with.instanceof( Date )
+						exercise.daytime.toString().should.not.equal( "Invalid Date" )
 						exercise.should.have.property( "sport" ).with.instanceof( String )
 						exercise.should.have.property( "calories" ).with.instanceof( Number )
 						exercise.should.have.property( "duration" ).with.instanceof( Number )
@@ -108,7 +109,7 @@ describe "----- polar-sdk TESTS -----", ->
 						exercise.should.have.property( "heartrate_max" ).with.instanceof( Number )
 						
 						exercise.should.have.property( "additional" ).with.instanceof( Object )
-						exercise.additional.should.have.property( "polar_id" ).with.instanceof( Number )
+						exercise.additional.should.have.property( "polar_id" )
 						exercise.additional.should.have.property( "hasroute" ).with.instanceof( Boolean )
 						
 						exercise.should.have.property( "_meta" ).with.instanceof( Object )

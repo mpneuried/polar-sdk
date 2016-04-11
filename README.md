@@ -73,6 +73,36 @@ Deregister a user
 - **email** : *( `String` )* If the email of your your user is not teh one he used within the polar flow system, you can redefine it.
 - **cb** : *( `Function` )* Callback function with args `( err, successBool )`
 
+### `.users( type[, count ][, from ], cb )`
+
+request the user list from polar.
+
+**Arguments** 
+
+- **type** : *( `String` required; enum=`accepted`, `deleted` )* Read the accepted users or the deleted users.
+- **count** : *( `Number` optional: default = `1000` )* The count of users to read
+- **from** : *( `Date` optional: default = `now()` )* The time until the user was accepted. (only relevant for `type=accepted`)
+- **cb** : *( `Function` )* Callback function with args `( err, usersArray )`
+
+**Example response:**
+
+```json
+[
+    {
+        "user_id": "GzGyc",
+        "date": Date( "Thu, 07 Apr 2016 00:00:00 GMT" ),
+        "email": "john.doe@polar.com",
+        "status": 1, // 0 = pending; 1 = accepted; -1 = deleted
+        "additional": {
+            "polar_id": "/users/20773075"
+        }
+    },{
+        ...
+    }
+    ...
+]
+```
+
 ### `.listActivities( cb  )`
 
 do a transactional receive of the activities of all connected users since the last call
@@ -178,6 +208,7 @@ The supported locales are:
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.5|2016-04-11|fixed read of `daytime`|
 |0.0.4|2016-04-08|fixed (de)register calls, optimized ignore files|
 |0.0.3|2016-04-08|optimized debugging output|
 |0.0.2|2016-04-07|fixed error output|
