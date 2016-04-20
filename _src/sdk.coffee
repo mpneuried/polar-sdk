@@ -38,7 +38,7 @@ module.exports = class PolarSDK extends require( "./basic" )
 			@debug "register-return", err, data
 			if err?.statusCode is 409
 				# assuming a reregister leads to a 409
-				@warning "got 409 so guess a reregister", opt.json
+				@warning "got 409 so guess a reregister"
 				cb( null, true )
 				return
 				

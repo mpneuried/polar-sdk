@@ -208,6 +208,7 @@ The supported locales are:
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.6|2016-04-20|fixed error during register error handling ;-)|
 |0.0.5|2016-04-11|fixed read of `daytime`|
 |0.0.4|2016-04-08|fixed (de)register calls, optimized ignore files|
 |0.0.3|2016-04-08|optimized debugging output|
