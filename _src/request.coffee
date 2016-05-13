@@ -19,11 +19,19 @@ module.exports = class PolarRequester extends require( "./basic" )
 		return "PolarRequester"
 	
 	get: ( [ type, query, options ]..., cb )=>
+		if @config.useSandbox
+			_cnf = @config.sandbox
+		else
+			_cnf = @config
+
 		opt =
 			url: @_url( type, options )
 			qs: query
 			headers: @_headers( type, options )
 			method: "GET"
+			auth: 
+				user: _cnf.user
+				pass: _cnf.password
 		
 		@debug "#{type}-req", opt
 		
@@ -41,11 +49,19 @@ module.exports = class PolarRequester extends require( "./basic" )
 		return
 		
 	post: ( [ type, data, options ]..., cb )=>
+		if @config.useSandbox
+			_cnf = @config.sandbox
+		else
+			_cnf = @config
+
 		opt =
 			url: @_url( type, options )
 			headers: @_headers( type, options )
 			method: "POST"
 			json: data or {}
+			auth: 
+				user: _cnf.user
+				pass: _cnf.password
 		
 		@debug "#{type}-req", opt
 		request opt, ( err, res )=>
@@ -124,9 +140,6 @@ module.exports = class PolarRequester extends require( "./basic" )
 		else
 			_url = "http://"
 		
-		if not @config.authByHeader
-			_url += "#{_cnf.user}:#{_cnf.password}@"
-		
 		_url += _cnf.host
 		
 		switch type
@@ -155,17 +168,9 @@ module.exports = class PolarRequester extends require( "./basic" )
 		return _url
 	
 		
-	_headers: ( type, data )=>
-		if @config.useSandbox
-			_cnf = @config.sandbox
-		else
-			_cnf = @config
-		
+	_headers: ( type, data )=>		
 		headers =
 			'content-type': 'application/json'
-		
-		if @config.authByHeader
-			headers.Authorization = new Buffer("#{_cnf.password}:#{_cnf.user}").toString('base64')
 		
 		switch type
 			when "transaction-list"

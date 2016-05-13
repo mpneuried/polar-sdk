@@ -33,7 +33,6 @@ Simplify the usage of the polar flow api to register, deregister, and list users
 - **password** : *( `String` required )*  Polar AccessLink api password. Can also be set by environment variable `POLAR_SDK_PASSWORD`
 - **host** : *( `String` optional: default = `www.polaraccesslink.com` )*  Polar AccessLink host. Can also be set by environment variable `POLAR_SDK_HOST`
 - **useSandbox** : *( `Boolean` optional: default = `false` )* Use the sandbox configuration. Can also be set by environment variable `POLAR_SDK_SANDBOX`
-- **authByHeader** : *( `Boolean` optional: default = `false` )*  Authentication through header
 - **maxLoadUsers** : *( `Number` optional: default = `1000` )*  The default count of users to load
 - **ssl** : *( `Boolean` optional: default = `true` )*  Use https to access the api
 - **fallbackLocale** : *( `String` optional: default = `en` )* The fallback locale. It has to be a supported language
@@ -208,6 +207,7 @@ The supported locales are:
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.8|2016-05-12|allways use header authentication|
 |0.0.7|2016-04-21|fixed defect compile|
 |0.0.6|2016-04-20|fixed error during register error handling ;-)|
 |0.0.5|2016-04-11|fixed read of `daytime`|

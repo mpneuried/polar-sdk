@@ -17,8 +17,6 @@ DEFAULTS =
 	# **GENERAL**
 	# **useSandbox** *Boolean* Use the sandbox configuration
 	useSandbox: process.env.POLAR_SDK_SANDBOX or false
-	# **authByHeader** *Boolean* Authentication through header
-	authByHeader: false
 	# **maxLoadUsers** *Number* The default count of users to load
 	maxLoadUsers: 1000
 	# **fallbackLocale** *String* The locale code to fallback if the given localed is not within the supported locales

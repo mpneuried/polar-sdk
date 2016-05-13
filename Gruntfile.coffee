@@ -60,12 +60,15 @@ module.exports = (grunt) ->
 
 	# ALIAS TASKS
 	grunt.registerTask "default", "build"
-	grunt.registerTask "w", "watcher"
 	grunt.registerTask "wt", "watcher-test"
 	grunt.registerTask "watcher", [ "watch:module" ]
 	grunt.registerTask "watcher-test", [ "watch:module_test" ]
 	grunt.registerTask "clear", [ "clean:base" ]
-	grunt.registerTask "test", [ "mochacli:main" ]
+	grunt.registerTask "test", [ "build", "mochacli:main" ]
+
+	grunt.registerTask "w", "watcher"
+	grunt.registerTask "b", "build"
+	grunt.registerTask "t", "test"
 
 	# build the project
 	grunt.registerTask "build", [ "clear", "coffee:base", "includereplace" ]
