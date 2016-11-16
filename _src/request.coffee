@@ -36,7 +36,7 @@ module.exports = class PolarRequester extends require( "./basic" )
 		@debug "#{type}-req", opt
 		
 		request opt, ( err, res )=>
-			@debug "#{type}-return", [ err, res.statusCode, res.body ]
+			@debug "#{type}-return", [ err, res.statusCode, res.body, res.headers ]
 			if err
 				cb( err )
 				return

@@ -18,7 +18,7 @@ DEFAULTS =
 	# **useSandbox** *Boolean* Use the sandbox configuration
 	useSandbox: process.env.POLAR_SDK_SANDBOX or false
 	# **maxLoadUsers** *Number* The default count of users to load
-	maxLoadUsers: 1000
+	maxLoadUsers: 50
 	# **fallbackLocale** *String* The locale code to fallback if the given localed is not within the supported locales
 	fallbackLocale: "en"
 
@@ -45,13 +45,15 @@ DEFAULTS =
 	
 	
 	# **INTERNALS**
-	# **userRequestTypes** *String[]* List of user reqiuest types. ONLY FOR INTERNAL USE.
-	userRequestTypes: [ "accepted", "deleted" ]
+	# **userRequestTypes** *String[]* List of user request types. ONLY FOR INTERNAL USE.
+	userRequestTypes: [ "accepted", "deleted" ] #, "pending", "requests", "denied" ] currently in API version 2.20.1 documented methods `pending`, `requests` and `denied` are not working.
 	# **transactionTypes** *String[]* List of transaction requests. ONLY FOR INTERNAL USE.
 	transactionTypes: [ "activity", "exercise" ]
 	# **langcodes** *String[]* List supported locales. ONLY FOR INTERNAL USE.
 	locales: [ "da","de","en","es","fr","it","nl","no","pl","pt","fi","sv","ru","ja","zh" ]
-
+	# **transactionTypes** *String[]* List of user request types that are allowed to use the param `begin_from`. ONLY FOR INTERNAL USE.
+	usersBeginFromParamTypes: [ "accepted" ]
+	
 	logging:
 		severity: process.env[ "severity" ] or process.env[ "severity_polar_sdk"] or process.env.POLAR_SDK_SEVERITY or ( if _debug then "debug" else "warning" )
 		severitys: "fatal,error,warning,info,debug".split( "," )

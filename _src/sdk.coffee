@@ -77,17 +77,22 @@ module.exports = class PolarSDK extends require( "./basic" )
 		else
 			_q.count = @config.maxLoadUsers
 			
-		if type is "accepted"
+		if type in @config.usersBeginFromParamTypes
 			if not from? ot not _isDate( from )
 				from = new Date()
 			_q.begin_from = from.getFullYear() + '-' + from.getMonth() + '-' + from.getDate() + 'T' + from.getHours() + ':' + from.getMinutes()
-			
+		
+		@debug "users-request-#{type}", _q
 		@request.get "#{type}-users", _q, ( err, result )=>
 			if err
 				cb( err )
 				return
 			
 			users = []
+			if not result?.user?.length
+				cb( null, [] )
+				return
+				
 			for user in result.user
 				users.push
 					user_id: user['member-id']
@@ -110,6 +115,10 @@ module.exports = class PolarSDK extends require( "./basic" )
 				return
 				
 			activities = []
+			if not result?[ "activity-log" ]?.length
+				cb( null, [] )
+				return
+			
 			for activity in result[ "activity-log" ]
 				_ob =
 					user_id: activity['member-id']
@@ -145,6 +154,10 @@ module.exports = class PolarSDK extends require( "./basic" )
 				return
 				
 			exercises = []
+			if not result?.exercise?.length
+				cb( null, [] )
+				return
+				
 			for exercise in result.exercise
 				exercises.push
 					user_id: exercise['member-id']
