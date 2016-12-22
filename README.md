@@ -207,6 +207,7 @@ The supported locales are:
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.11|2016-12-22|Fixed require because aws-lamda seems to be case sensitive ;-)|
 |0.0.10|2016-12-22|Finally/Hopefully fixed the processing of activities and exercising by manual parse. Probably caused by a incompatible content-type format in request|
 |0.0.9|2016-11-16|Bugfix after change of polar api. It seems to have changed the max Number of users per request. A higher number will result in an empty response. So now the default user count is set from `1000` to `50`|
 |0.0.8|2016-05-12|always use header authentication|

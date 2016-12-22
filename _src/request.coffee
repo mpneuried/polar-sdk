@@ -7,7 +7,7 @@
 http = require( "http" )
 
 # **npm modules**
-_isString = require( "lodash/isstring" )
+_isString = require( "lodash/isString" )
 _last = require( "lodash/last" )
 _template = require( "lodash/template" )
 request = require( "hyperrequest" )
