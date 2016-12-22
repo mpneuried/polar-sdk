@@ -21,3 +21,4 @@ deploy.json
 
 *.env
 !*.env_skeleton
+example_*.json

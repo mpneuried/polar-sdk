@@ -1,6 +1,6 @@
 {
 	"name": "polar-sdk",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"description": "Simplify the usage of the polar flow api to register, deregister, and list users. It also supports reading the daily activity and exercises",
 	"keywords": [],
 	"homepage": "https://github.com/mpneuried/polar-sdk",
@@ -31,6 +31,7 @@
 	"devDependencies": {
 		"should": "11.x",
 		"grunt": "1.0.x",
+		"dotenv": "2.x",
 		"grunt-contrib-watch": "1.0",
 		"grunt-contrib-coffee": "1.x",
 		"grunt-contrib-clean": "1.x",

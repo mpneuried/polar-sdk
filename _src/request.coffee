@@ -7,6 +7,7 @@
 http = require( "http" )
 
 # **npm modules**
+_isString = require( "lodash/isstring" )
 _last = require( "lodash/last" )
 _template = require( "lodash/template" )
 request = require( "hyperrequest" )
@@ -29,7 +30,7 @@ module.exports = class PolarRequester extends require( "./basic" )
 			qs: query
 			headers: @_headers( type, options )
 			method: "GET"
-			auth: 
+			auth:
 				user: _cnf.user
 				pass: _cnf.password
 		
@@ -40,11 +41,8 @@ module.exports = class PolarRequester extends require( "./basic" )
 			if err
 				cb( err )
 				return
-			
-			if res.statusCode < 200 or res.statusCode >= 300
-				@_handleError( cb, "EPOLARERROR", { message: res.statusCode + " " + http.STATUS_CODES[res.statusCode], statusCode: res.statusCode })
-				return
-			cb( null, res.body, res.headers )
+				
+			@_handleResponse( "GET", type, res, cb )
 			return
 		return
 		
@@ -59,7 +57,7 @@ module.exports = class PolarRequester extends require( "./basic" )
 			headers: @_headers( type, options )
 			method: "POST"
 			json: data or {}
-			auth: 
+			auth:
 				user: _cnf.user
 				pass: _cnf.password
 		
@@ -70,12 +68,32 @@ module.exports = class PolarRequester extends require( "./basic" )
 				cb( err )
 				return
 			
-			if res.statusCode < 200 or res.statusCode >= 300
-				@_handleError( cb, "EPOLARERROR", { message: res.statusCode + " " + http.STATUS_CODES[res.statusCode], statusCode: res.statusCode })
-				return
-			cb( null, res.body, res.headers )
+			@_handleResponse( "POST", type, res, cb )
 			return
 		return
+	
+	
+	_regexpTestJSON: /json/i
+	_handleResponse: ( method, type, res, cb )=>
+		
+		
+		if res.statusCode < 200 or res.statusCode >= 300
+			@_handleError( cb, "EPOLARERROR", { message: res.statusCode + " " + http.STATUS_CODES[res.statusCode], statusCode: res.statusCode })
+			return
+			
+		if _isString( res.body ) and @_regexpTestJSON.test( res.headers?[ "content-type" ] or "" )
+			try
+				result = JSON.parse( res.body )
+			catch _err
+				@_handleError( cb, "EPARSERESULTS", { type: type, method: method })
+				return
+		else
+			result = res.body
+		
+		
+		cb( null, result, res.headers )
+		return
+		
 		
 	transaction: ( type, cb )=>
 		if not type? or type not in @config.transactionTypes
@@ -88,6 +106,10 @@ module.exports = class PolarRequester extends require( "./basic" )
 		@_createTransaction options, ( err, options )=>
 			if err
 				cb( err )
+				return
+				
+			if options.transaction_id is 0
+				cb( null, [], options.transaction_id )
 				return
 				
 			@get "transaction-list", null, options, ( err, result )=>
@@ -108,7 +130,6 @@ module.exports = class PolarRequester extends require( "./basic" )
 			if err
 				cb( err )
 				return
-			
 			options.transaction_id = transaction_id = _last( headers.location.split( "/" ) )
 			@debug "transaction new headers", headers, options
 			cb( null, options )
@@ -168,13 +189,13 @@ module.exports = class PolarRequester extends require( "./basic" )
 		return _url
 	
 		
-	_headers: ( type, data )=>		
+	_headers: ( type, data )->
 		headers =
 			'content-type': 'application/json'
 		
 		switch type
 			when "transaction-list"
-				headers.Accept = "Application/json"
+				headers.Accept = "application/json"
 		return headers
 	
 		
@@ -184,3 +205,4 @@ module.exports = class PolarRequester extends require( "./basic" )
 			"EPOLARERROR": [ 500, "EPOLARERROR" ]
 			"EINVALIDTRANSACTIONTYPE": [ 406, "invalid transaction type. You tried to use the type `<%= type %>`, but only the types  `<% types.join( '`, `' ) %>` are allowed" ]
 			"EMISSINGTRANSACTIONID": [ 406, "to commit a transaction you have to add a transaction id" ]
+			"EPARSERESULTS": [ 500, "cannot parse response from `<%= method %>` request of type `<%= type %>`" ]

@@ -109,77 +109,93 @@ module.exports = class PolarSDK extends require( "./basic" )
 	listActivities: ( cb )->
 
 		# start a transaction
-		@request.transaction "activity", ( err, result, transaction_id )->
+		@request.transaction "activity", ( err, result, transaction_id )=>
 			if err
 				cb( err )
 				return
 				
-			activities = []
 			if not result?[ "activity-log" ]?.length
 				cb( null, [] )
 				return
 			
-			for activity in result[ "activity-log" ]
-				_ob =
-					user_id: activity['member-id']
-					day: new Date(activity['date'])
-					calories: activity.calories
-					steps: activity['active-steps']
-					goal: activity['activity-goal']
-					achieved: activity['activity-achieved']
-					activetime: utils.duration( activity.duration )
-					additional:
-						polar_id: activity['polar-user']
-						zones: []
-						active_calories: activity['active-calories']
-					_meta:
-						id: activity.id
-						transaction: transaction_id
-				
-				for zone in activity['activity-zones']
-					_ob.additional.zones.push( utils.duration( zone.inzone ) )
-				
-				activities.push _ob
-			
-			cb( null, activities )
+			cb( null, @_processActivities( result, transaction_id ) )
 			return
 		return
 	
 	listExercises: ( cb )->
 
 		# start a transaction
-		@request.transaction "exercise", ( err, result, transaction_id )->
+		@request.transaction "exercise", ( err, result, transaction_id )=>
 			if err
 				cb( err )
 				return
 				
-			exercises = []
 			if not result?.exercise?.length
 				cb( null, [] )
 				return
-				
-			for exercise in result.exercise
-				exercises.push
-					user_id: exercise['member-id']
-					daytime: new Date(exercise['start-time'])
-					device: exercise.device
-					sport: exercise.sport
-					calories: exercise.calories or 0
-					duration: utils.duration( exercise.duration )
-					distance: exercise.distance or 0
-					heartrate_avg: exercise['heart-rate']['average'] or 0
-					heartrate_max: exercise['heart-rate']['maximum'] or 0
-					additional:
-						polar_id: exercise['polar-user']
-						hasroute: exercise['has-route']
-					_meta:
-						id: exercise.id
-						transaction: transaction_id
 
-			cb( null, exercises )
+			cb( null, @_processExercises( result, transaction_id ) )
 			return
 		return
+		
+	_processActivities: ( result, transaction_id )=>
+		activities = []
+		
+		for activity in result[ "activity-log" ]
+			activities.push @_processActivity( activity, transaction_id )
+			
+		return activities
 	
+	_processActivity: ( activity, transaction_id = 0 )->
+		ret =
+			user_id: activity['member-id']
+			day: new Date(activity['date'])
+			calories: activity.calories
+			steps: activity['active-steps']
+			goal: activity['activity-goal']
+			achieved: activity['activity-achieved']
+			activetime: utils.duration( activity.duration )
+			additional:
+				polar_id: activity['polar-user']
+				zones: []
+				active_calories: activity['active-calories']
+			_meta:
+				id: activity.id
+				transaction: transaction_id
+		
+		for zone in activity['activity-zones']
+			ret.additional.zones.push( utils.duration( zone.inzone ) )
+		
+		return ret
+		
+	_processExercises: ( result, transaction_id )=>
+		exercises = []
+		
+		for exercise in result[ "exercise" ]
+			exercises.push @_processExercise( exercise, transaction_id )
+			
+		return exercises
+	
+	_processExercise: ( exercise, transaction_id = 0 )->
+		ret =
+			user_id: exercise['member-id']
+			daytime: new Date(exercise['start-time'])
+			device: exercise.device
+			sport: exercise.sport
+			calories: exercise.calories or 0
+			duration: utils.duration( exercise.duration )
+			distance: exercise.distance or 0
+			heartrate_avg: exercise['heart-rate']['average'] or 0
+			heartrate_max: exercise['heart-rate']['maximum'] or 0
+			additional:
+				polar_id: exercise['polar-user']
+				hasroute: exercise['has-route']
+			_meta:
+				id: exercise.id
+				transaction: transaction_id
+		
+		return ret
+		
 	_getLocale: ( locale )=>
 		if locale.indexOf( "_" )
 			[ lang, country ] = locale.split( "_" )
