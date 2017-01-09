@@ -12,6 +12,8 @@ _isDate = require( "lodash/isDate" )
 PolarRequest = require( "./request" )
 utils = require( "./utils" )
 
+MONTH_MS = 1000 * 60 * 60 * 24 * 30
+
 module.exports = class PolarSDK extends require( "./basic" )
 	
 	initialize: =>
@@ -79,8 +81,8 @@ module.exports = class PolarSDK extends require( "./basic" )
 			
 		if type in @config.usersBeginFromParamTypes
 			if not from? ot not _isDate( from )
-				from = new Date()
-			_q.begin_from = from.getFullYear() + '-' + from.getMonth() + '-' + from.getDate() + 'T' + from.getHours() + ':' + from.getMinutes()
+				from = new Date( Date.now() - MONTH_MS )
+			_q.begin_from = from.toISOString()[..-6]
 		
 		@debug "users-request-#{type}", _q
 		@request.get "#{type}-users", _q, ( err, result )=>
